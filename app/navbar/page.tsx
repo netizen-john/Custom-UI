@@ -28,6 +28,7 @@ const ProGlassmorphismNavbar = () => {
   const [searchFocused, setSearchFocused] = useState(false);
   const [cartCount, setCartCount] = useState(3);
   const [notifications, setNotifications] = useState(2);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -62,10 +63,6 @@ const ProGlassmorphismNavbar = () => {
     { name: "Resources", hasDropdown: false },
     { name: "Community", hasDropdown: false },
   ];
-
-  navItems.map((item, index) => {
-    console.log(item);
-  });
 
   const toggleTheme = () => {
     setIsDark(!isDark);
@@ -144,13 +141,17 @@ const ProGlassmorphismNavbar = () => {
                 <div
                   key={index}
                   className="relative"
-                  onMouseEnter={() =>
-                    item.hasDropdown && setActiveDropdown(item.name)
-                  }
-                  onMouseLeave={() => setActiveDropdown("")}
+                  onClick={() => {
+                    if (item.hasDropdown) {
+                      // Toggle active dropdown: close if already active
+                      setActiveDropdown((prev) =>
+                        prev === item.name ? "" : item.name
+                      );
+                    }
+                  }}
                 >
                   <button
-                    className={`flex items-center space-x-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:scale-105 ${
+                    className={`flex items-center space-x-1 px-3 py-2 rounded-lg cursor-pointer text-sm font-medium transition-all duration-300 hover:scale-105 ${
                       isDark
                         ? "text-gray-300 hover:text-white hover:bg-white/10"
                         : "text-gray-700 hover:text-gray-900 hover:bg-black/5"
@@ -165,7 +166,6 @@ const ProGlassmorphismNavbar = () => {
                       />
                     )}
                   </button>
-
                   {/* Dropdown Menu */}
                   {item.hasDropdown && activeDropdown === item.name && (
                     <div
